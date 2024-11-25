@@ -11,6 +11,15 @@ import router from '@/router'
 // Vuex
 import store from '@/store'
 
+// Components
+import MyButton from '@/components/UI/MyButton.vue'
+import MyInput from '@/components/UI/MyInput.vue'
+import MySelect from '@/components/UI/MySelect.vue'
+
+Vue.component('my-button', MyButton)
+Vue.component('my-input', MyInput)
+Vue.component('my-select', MySelect)
+
 new Vue({
   router,
   store,
