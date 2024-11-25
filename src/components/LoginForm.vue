@@ -5,16 +5,20 @@
     </header>
 
     <main class="login-form__main">
-      <my-input>
+      <my-input :value="phoneOrLogin ? phoneOrLogin : '+7'" @input="updatePhoneOrLogin">
         <template #left-icon>
-          <img src="@/assets/icons/phone.svg" alt="phone-icon" width="24" height="24" />
+          <img src="@/assets/icons/phone.svg" class="form-icon" alt="phone-icon" />
         </template>
         <template #label>Логин или телефон</template>
       </my-input>
 
-      <my-input :type="showPassword ? 'text' : 'password'">
+      <my-input
+        :value="password"
+        :type="showPassword ? 'text' : 'password'"
+        @input="updatePassword"
+      >
         <template #left-icon>
-          <img src="@/assets/icons/block.svg" alt="lock-icon" width="24" height="24" />
+          <img src="@/assets/icons/block.svg" alt="lock-icon" class="form-icon" />
         </template>
 
         <template #label>Пароль</template>
@@ -45,6 +49,28 @@ export default {
   data() {
     return {
       showPassword: false
+    }
+  },
+  computed: {
+    password() {
+      return this.$store.getters.password
+    },
+    phoneOrLogin() {
+      return this.$store.getters.phoneOrLogin
+    }
+  },
+  methods: {
+    updatePhoneOrLogin(value) {
+      this.$store.commit('UPDATE_AUTH_FIELD', {
+        field: 'phoneOrLogin',
+        value
+      })
+    },
+    updatePassword(value) {
+      this.$store.commit('UPDATE_AUTH_FIELD', {
+        field: 'password',
+        value
+      })
     }
   }
 }
@@ -80,6 +106,9 @@ export default {
     gap: 1.5rem
     transform: translateY(-1rem)
 
-.password-icon
+.password-icon,
+.form-icon
   cursor: pointer
+  width: 2.4rem
+  height: 2.4rem
 </style>

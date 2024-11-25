@@ -6,6 +6,7 @@
 
     <div class="my-input__inner">
       <input
+        :value="value"
         :type="type === 'password' ? 'password' : 'text'"
         class="my-input__input"
         required
