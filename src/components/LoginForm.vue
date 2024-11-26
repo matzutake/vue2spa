@@ -5,7 +5,7 @@
     </header>
 
     <main class="login-form__main">
-      <my-input :value="phoneOrLogin ? phoneOrLogin : '+7'" @input="updatePhoneOrLogin">
+      <my-input :value="username ? username : '+7'" @input="updateUsername">
         <template #left-icon>
           <img src="@/assets/icons/phone.svg" class="form-icon" alt="phone-icon" />
         </template>
@@ -55,14 +55,14 @@ export default {
     password() {
       return this.$store.getters.password
     },
-    phoneOrLogin() {
-      return this.$store.getters.phoneOrLogin
+    username() {
+      return this.$store.getters.username
     }
   },
   methods: {
-    updatePhoneOrLogin(value) {
+    updateUsername(value) {
       this.$store.commit('UPDATE_AUTH_FIELD', {
-        field: 'phoneOrLogin',
+        field: 'username',
         value
       })
     },
