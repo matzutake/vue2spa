@@ -15,11 +15,35 @@
       </tr>
     </thead>
 
-    <tbody class="requests-table__body">
+    <tbody v-if="loaded" class="requests-table__body">
       <tr v-for="request in requests" class="requests-table__row">
-        {{
-          request.id
-        }}
+        <th>
+          <span class="requests-table__number">{{ request.number }}</span>
+        </th>
+        <th>
+          {{ new Date(request.created_at).toLocaleDateString() }}
+        </th>
+        <th>{{ parseAddress(request) }}</th>
+        <th>{{ parseName(request.applicant) }}</th>
+        <th>{{ request.description }}</th>
+        <th>
+          {{
+            new Date(request.due_date).toLocaleDateString('default', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })
+          }}
+        </th>
+        <th>{{ request.status.name }}</th>
+      </tr>
+    </tbody>
+
+    <tbody v-else class="requests-table__body">
+      <tr v-for="i in 30" class="loading">
+        <th colspan="7"></th>
       </tr>
     </tbody>
   </table>
@@ -28,9 +52,46 @@
 <script>
 export default {
   name: 'RequestsTable',
+  props: {
+    loaded: {
+      type: Boolean,
+      default: false
+    }
+  },
   computed: {
     requests() {
       return this.$store.getters.reqList
+    }
+  },
+  methods: {
+    parseName(applicant) {
+      let last_name = applicant?.last_name || ''
+      let first_name = applicant?.first_name || ''
+      let patronymic_name = applicant?.patronymic_name || ''
+
+      if (last_name) {
+        last_name.charAt(0).toUpperCase()
+      }
+
+      if (first_name) {
+        first_name = first_name.charAt(0).toUpperCase() + '.'
+      }
+
+      if (patronymic_name) {
+        patronymic_name = patronymic_name.charAt(0).toUpperCase() + '.'
+      }
+
+      return `${last_name} ${first_name} ${patronymic_name}`
+    },
+    parseAddress(request) {
+      let address = request?.premise?.address || ''
+      let apartment = request?.apartment?.label || ''
+
+      if (address && apartment) {
+        return `${address}, ${apartment}`
+      } else {
+        return address + apartment
+      }
     }
   }
 }
@@ -54,6 +115,29 @@ export default {
     color: $green
 
   &__body
-    overflow-y: auto
-    max-height: 10rem
+    grid-template-columns: repeat(7, 1fr)
+
+  &__number
+    display: flex
+    align-items: center
+    justify-content: center
+    width: fit-content
+    background-color: $green
+    padding: .5rem 1.25rem
+    border-radius: .5rem
+    color: $white
+
+.loading
+  height: 5rem
+  border-radius: 1rem
+  border-bottom: 1px solid $gray
+  animation: loading-animation 1.5s linear infinite
+  background: linear-gradient(90deg, rgba(61, 61, 61, 0.1) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(61, 61, 61, 0.1) 100%)
+  background-size: 200% 100%
+
+@keyframes loading-animation
+  0%
+    background-position: 200% 0
+  100%
+    background-position: -200% 0
 </style>

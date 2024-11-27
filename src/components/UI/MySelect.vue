@@ -1,7 +1,9 @@
 <template>
   <div class="my-select">
-    <select class="my-select__select">
-      <option class="my-select__option">{{ placeholder }}</option>
+    <select class="my-select__select" :value="value" @input="$emit('input', $event.target.value)">
+      <option class="my-select__option" :value="option" v-for="option in options" :key="option">
+        {{ option }}
+      </option>
     </select>
   </div>
 </template>
@@ -13,6 +15,14 @@ export default {
     placeholder: {
       type: String,
       default: 'Выбрать'
+    },
+    options: {
+      type: Array,
+      default: () => []
+    },
+    value: {
+      type: [String, Number],
+      default: ''
     }
   }
 }
@@ -28,7 +38,6 @@ export default {
   &__select
     width: 100%
     padding: .75rem 1rem
-    color: $dark-gray
     font-size: 1.2rem
     background-color: transparent
 

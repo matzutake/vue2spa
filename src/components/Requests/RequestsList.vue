@@ -11,30 +11,93 @@
       </div>
     </header>
 
-    <RequestsTable />
+    <div class="table-wrapper">
+      <RequestsTable :loaded="loaded" />
+    </div>
 
-    <footer></footer>
+    <footer v-if="loaded" class="requests-list__footer">
+      <div class="count">
+        <div class="range">
+          <span style="font-weight: bold">{{ currentStart }}</span>
+          <span> - </span>
+          <span style="font-weight: bold">{{ currentEnd }}</span>
+          <span> из </span>
+          <span style="font-weight: bold">{{ reqData?.count }}</span>
+        </div>
+        <my-select
+          :value="reqData?.page_size"
+          :options="[10, 25, 50, 100]"
+          placeholder="Записей на странице"
+          @input="updatePageSize"
+        />
+      </div>
+
+      <RequestPagination />
+    </footer>
   </div>
 </template>
 
 <script>
 import RequestsTable from '@/components/Requests/RequestsTable.vue'
+import RequestPagination from './RequestPagination.vue'
 
 export default {
   name: 'RequestsList',
   components: {
-    RequestsTable
+    RequestsTable,
+    RequestPagination
+  },
+  data() {
+    return {
+      loaded: false
+    }
+  },
+  computed: {
+    reqData() {
+      return this.$store.getters.reqData
+    },
+    currentStart() {
+      return this.reqData?.page_size * this.reqData?.page
+    },
+    currentEnd() {
+      let end = this.reqData?.page_size * (this.reqData?.page + 1)
+      if (end > this.reqData?.count) end = this.reqData?.count
+      return end
+    }
+  },
+  methods: {
+    async updatePageSize(value) {
+      this.$store.commit('SET_REQ_DATA', {
+        ...this.reqData,
+        page_size: value
+      })
+
+      const payload = {
+        page_size: value,
+        page: this.reqData?.page
+      }
+      this.loaded = false
+      await this.$store.dispatch('getReqList', payload).then(() => {
+        this.loaded = true
+      })
+    }
   }
 }
 </script>
 
 <style lang="sass" scoped>
+.table-wrapper
+  overflow-y: auto
+  flex: 1
+  max-height: 75vh
+
 .requests-list
   display: flex
   flex-direction: column
   background-color: $white
   flex: 1
   padding: 1.5rem
+  gap: 1.5rem
   border-radius: 1rem
 
   &__header
@@ -42,6 +105,11 @@ export default {
     flex-direction: column
     gap: 1.5rem
 
+  &__footer
+    display: flex
+    justify-content: space-between
+    align-items: flex-end
+    height: 5vh
 
   &__create
     align-self: flex-end
@@ -51,4 +119,9 @@ export default {
     display: flex
     gap: 1.5rem
     justify-content: space-between
+
+.count
+  display: flex
+  gap: 1rem
+  align-items: center
 </style>
