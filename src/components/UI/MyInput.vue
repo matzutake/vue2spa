@@ -1,25 +1,31 @@
 <template>
-  <div class="my-input">
-    <div class="icon-wrapper left">
-      <slot name="left-icon" />
-    </div>
+  <div class="my-input__wrapper">
+    <div class="my-input" :class="{ 'my-input--error': error }">
+      <div class="icon-wrapper left">
+        <slot name="left-icon" />
+      </div>
 
-    <div class="my-input__inner">
-      <input
-        :value="value"
-        :type="type === 'password' ? 'password' : 'text'"
-        class="my-input__input"
-        required
-        @input="$emit('input', $event.target.value)"
-      />
+      <div class="my-input__inner">
+        <input
+          :value="value"
+          :type="type === 'password' ? 'password' : 'text'"
+          class="my-input__input"
+          required
+          @input="$emit('input', $event.target.value)"
+        />
 
-      <div class="my-input__label">
-        <slot name="label" />
+        <div class="my-input__label">
+          <slot name="label" />
+        </div>
+      </div>
+
+      <div class="icon-wrapper right">
+        <slot name="right-icon" class="my-input__icon right" />
       </div>
     </div>
 
-    <div class="icon-wrapper right">
-      <slot name="right-icon" class="my-input__icon right" />
+    <div v-if="error" class="my-input__error">
+      {{ error }}
     </div>
   </div>
 </template>
@@ -33,6 +39,10 @@ export default {
       default: 'text'
     },
     value: {
+      type: String,
+      default: ''
+    },
+    error: {
       type: String,
       default: ''
     }
@@ -49,6 +59,14 @@ export default {
   gap: .5rem
   border-bottom: 1px solid $gray
 
+  &--error
+    border-color: $red
+
+  &__wrapper
+    display: flex
+    flex-direction: column
+    width: 100%
+    gap: 1rem
 
   &__inner
     position: relative
@@ -88,6 +106,10 @@ export default {
     font-size: 1.2rem
     transition: 200ms
     color: $dark-gray
+
+  &__error
+    color: $red
+    font-size: 1rem
 
 .right
   margin-right: 1rem

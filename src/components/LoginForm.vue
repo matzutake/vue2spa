@@ -15,6 +15,7 @@
       <my-input
         :value="password"
         :type="showPassword ? 'text' : 'password'"
+        :error="passError"
         @input="updatePassword"
       >
         <template #left-icon>
@@ -33,10 +34,12 @@
           />
         </template>
       </my-input>
+
+      <span class="login-form__error">{{ error }}</span>
     </main>
 
     <footer class="login-form__footer">
-      <my-button>
+      <my-button @click="tryLogin">
         <template #text>Войти</template>
       </my-button>
     </footer>
@@ -44,11 +47,15 @@
 </template>
 
 <script>
+import router from '@/router'
+
 export default {
   name: 'LoginForm',
   data() {
     return {
-      showPassword: false
+      showPassword: false,
+      error: null,
+      passError: null
     }
   },
   computed: {
@@ -65,12 +72,43 @@ export default {
         field: 'username',
         value
       })
+      this.error = null
     },
     updatePassword(value) {
       this.$store.commit('UPDATE_AUTH_FIELD', {
         field: 'password',
         value
       })
+      this.passError = null
+      this.error = null
+    },
+    async tryLogin() {
+      const cleanedUsername = this.username.replace(/\D/g, '')
+
+      try {
+        const result = await this.$store.dispatch('login', {
+          username: cleanedUsername,
+          password: this.password
+        })
+
+        this.$store.commit('UPDATE_AUTH_FIELD', {
+          field: 'key',
+          value: result.key
+        })
+
+        this.$store.commit('UPDATE_AUTH_FIELD', {
+          field: 'id',
+          value: result.employee_id
+        })
+
+        router.push({ name: 'home' })
+      } catch (error) {
+        if (error.response?.data?.data?.password) {
+          this.passError = error.response.data.data.password[0]
+        } else {
+          this.error = error.response?.data?.data?.non_field_errors[0]
+        }
+      }
     }
   }
 }
@@ -105,6 +143,11 @@ export default {
     flex-direction: column
     gap: 1.5rem
     transform: translateY(-1rem)
+
+  &__error
+    color: $red
+    font-size: 1rem
+
 
 .password-icon,
 .form-icon

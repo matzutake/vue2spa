@@ -4,7 +4,9 @@ import actions from './actions'
 
 const state = {
   username: '',
-  password: ''
+  password: '',
+  id: null,
+  key: null
 }
 
 export default {

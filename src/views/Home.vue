@@ -1,5 +1,8 @@
 <template>
-  <div>Дом</div>
+  <div>
+    <span>{{ $store.getters.id }}</span>
+    <span>{{ $store.getters.key }}</span>
+  </div>
 </template>
 
 <script>
