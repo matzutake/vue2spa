@@ -1,8 +1,17 @@
 <template>
   <div class="my-select">
     <select class="my-select__select" :value="value" @input="$emit('input', $event.target.value)">
-      <option class="my-select__option" :value="option" v-for="option in options" :key="option">
-        {{ option }}
+      <option class="my-select__option" value="" :selected="!value">
+        {{ placeholder }}
+      </option>
+
+      <option
+        class="my-select__option"
+        :value="option.value"
+        v-for="option in options"
+        :key="option.value"
+      >
+        {{ option.label }}
       </option>
     </select>
   </div>

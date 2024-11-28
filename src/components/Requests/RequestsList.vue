@@ -6,8 +6,8 @@
       </my-button>
 
       <div class="requests-list__filters">
-        <my-search placeholder="Поиск (№ заявки, название)" />
-        <my-select placeholder="Дом" />
+        <my-search placeholder="Поиск (№ заявки, название)" @search="updateSearch" />
+        <my-select placeholder="Дом" :options="premisesOptions" @input="updatePremises" />
       </div>
     </header>
 
@@ -26,13 +26,18 @@
         </div>
         <my-select
           :value="reqData?.page_size"
-          :options="[10, 25, 50, 100]"
+          :options="[
+            { value: 10, label: '10' },
+            { value: 25, label: '25' },
+            { value: 50, label: '50' },
+            { value: 100, label: '100' }
+          ]"
           placeholder="Записей на странице"
           @input="updatePageSize"
         />
       </div>
 
-      <RequestPagination />
+      <RequestPagination @updatePage="updatePage" />
     </footer>
   </div>
 </template>
@@ -49,7 +54,8 @@ export default {
   },
   data() {
     return {
-      loaded: false
+      loaded: false,
+      search: ''
     }
   },
   computed: {
@@ -63,6 +69,9 @@ export default {
       let end = this.reqData?.page_size * (this.reqData?.page + 1)
       if (end > this.reqData?.count) end = this.reqData?.count
       return end
+    },
+    premisesOptions() {
+      return this.$store.getters.premises.map((p) => ({ label: p.address, value: p.id }))
     }
   },
   methods: {
@@ -80,6 +89,47 @@ export default {
       await this.$store.dispatch('getReqList', payload).then(() => {
         this.loaded = true
       })
+    },
+    async updatePage(page) {
+      this.$store.commit('SET_REQ_DATA', {
+        ...this.reqData,
+        page
+      })
+
+      const payload = {
+        page_size: this.reqData?.page_size,
+        page
+      }
+      this.loaded = false
+      await this.$store.dispatch('getReqList', payload).then(() => {
+        this.loaded = true
+      })
+    },
+
+    async updatePremises(value) {
+      const payload = {
+        page_size: this.reqData?.page_size,
+        page: 1,
+        premise_id: value
+      }
+      this.loaded = false
+      await this.$store.dispatch('getReqList', payload).then(() => {
+        this.loaded = true
+      })
+    },
+
+    async updateSearch(value) {
+      this.search = value
+      const payload = {
+        page_size: this.reqData?.page_size,
+        page: 1,
+        search: value
+      }
+
+      this.loaded = false
+      await this.$store.dispatch('getReqList', payload).then(() => {
+        this.loaded = true
+      })
     }
   }
 }
@@ -87,6 +137,7 @@ export default {
 
 <style lang="sass" scoped>
 .table-wrapper
+  @include scrollbar
   overflow-y: auto
   flex: 1
   max-height: 75vh

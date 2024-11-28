@@ -15,5 +15,23 @@ export default {
     } catch (error) {
       throw error
     }
+  },
+
+  async getPremises({ commit }) {
+    try {
+      const response = await getQuery(
+        '/geo/v2.0/user-premises/',
+        {},
+        {
+          Authorization: `Token ${store.getters.key}`
+        }
+      )
+
+      commit('SET_PREMISES', response.results)
+
+      return response
+    } catch (error) {
+      throw error
+    }
   }
 }

@@ -6,7 +6,10 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       sass: {
-        additionalData: '@import "./src/assets/sass/variables.sass"'
+        additionalData: `
+        @import "@/assets/sass/variables.sass"
+        @import "@/assets/sass/mixins.sass"
+        `
       }
     }
   },

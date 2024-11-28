@@ -2,31 +2,31 @@
   <table class="requests-table">
     <thead class="requests-table__header">
       <tr class="requests-table__row">
-        <th>
+        <td>
           <span>№</span>
           <img src="@/assets/icons/sort.svg" width="24" height="24" alt="сортировка" />
-        </th>
-        <th>Создана</th>
-        <th>Адрес</th>
-        <th>Заявитель</th>
-        <th>Описание</th>
-        <th>Срок</th>
-        <th>Статус</th>
+        </td>
+        <td>Создана</td>
+        <td>Адрес</td>
+        <td>Заявитель</td>
+        <td>Описание</td>
+        <td>Срок</td>
+        <td>Статус</td>
       </tr>
     </thead>
 
     <tbody v-if="loaded" class="requests-table__body">
       <tr v-for="request in requests" class="requests-table__row">
-        <th>
+        <td>
           <span class="requests-table__number">{{ request.number }}</span>
-        </th>
-        <th>
+        </td>
+        <td>
           {{ new Date(request.created_at).toLocaleDateString() }}
-        </th>
-        <th>{{ parseAddress(request) }}</th>
-        <th>{{ parseName(request.applicant) }}</th>
-        <th>{{ request.description }}</th>
-        <th>
+        </td>
+        <td>{{ parseAddress(request) }}</td>
+        <td>{{ parseName(request.applicant) }}</td>
+        <td>{{ request.description }}</td>
+        <td>
           {{
             new Date(request.due_date).toLocaleDateString('default', {
               day: '2-digit',
@@ -36,8 +36,8 @@
               minute: '2-digit'
             })
           }}
-        </th>
-        <th>{{ request.status.name }}</th>
+        </td>
+        <td>{{ request.status.name }}</td>
       </tr>
     </tbody>
 
@@ -102,20 +102,26 @@ export default {
   width: 100%
   border-collapse: collapse
 
-  th
+  td
     text-align: left
     padding: 1rem 1.5rem
     font-weight: normal
     line-height: 2rem
+    max-width: 20rem
+    overflow: hidden
+    text-overflow: ellipsis
+    text-wrap: nowrap
 
   &__row
     border-bottom: 1px solid $gray
+
 
   &__header
     color: $green
 
   &__body
     grid-template-columns: repeat(7, 1fr)
+
 
   &__number
     display: flex

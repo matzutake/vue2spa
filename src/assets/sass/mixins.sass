@@ -1,0 +1,15 @@
+@mixin scrollbar($width: 8px, $track-color: $gray, $thumb-color: $dark-gray) 
+  &::-webkit-scrollbar
+    width: $width
+    height: $width
+
+  &::-webkit-scrollbar-track
+    background: $track-color
+
+  &::-webkit-scrollbar-thumb
+    background-color: $thumb-color
+    border-radius: 10px
+    border: 2px solid $track-color
+
+  &::-webkit-scrollbar-thumb:hover
+    background-color: darken($thumb-color, 10%)

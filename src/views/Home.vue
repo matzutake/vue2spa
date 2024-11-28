@@ -24,6 +24,8 @@ export default {
     await this.$store.dispatch('getReqList').then(() => {
       this.$refs.RequestList.loaded = true
     })
+
+    await this.$store.dispatch('getPremises')
   }
 }
 </script>

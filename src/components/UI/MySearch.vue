@@ -1,12 +1,12 @@
 <template>
   <div class="my-search">
-    <input type="text" :placeholder="placeholder" @input="$emit('input', $event.target.value)" />
+    <input type="text" :placeholder="placeholder" @input="updateSearch" />
     <img
       src="@/assets/icons/search.svg"
       width="24"
       height="24"
       alt="поиск"
-      @click="$emit('search')"
+      @click="$emit('search', search)"
     />
   </div>
 </template>
@@ -20,7 +20,15 @@ export default {
       default: 'Поиск'
     }
   },
-  emits: ['input', 'search']
+  emits: ['input', 'search'],
+  data() {
+    return {
+      search: ''
+    }
+  },
+  updateSearch(value) {
+    this.search = value
+  }
 }
 </script>
 

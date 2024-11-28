@@ -4,7 +4,8 @@ import actions from './actions'
 
 const state = {
   reqData: {},
-  reqList: []
+  reqList: [],
+  premises: []
 }
 
 export default {
