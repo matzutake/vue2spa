@@ -1,12 +1,11 @@
 <template>
   <div class="my-search">
-    <input type="text" :placeholder="placeholder" @input="updateSearch" />
+    <input v-model="search" type="text" :placeholder="placeholder" />
     <img
       src="@/assets/icons/search.svg"
-      width="24"
-      height="24"
       alt="поиск"
-      @click="$emit('search', search)"
+      class="form-icon"
+      @click="$emit('start-search', search)"
     />
   </div>
 </template>
@@ -20,7 +19,7 @@ export default {
       default: 'Поиск'
     }
   },
-  emits: ['input', 'search'],
+  emits: ['start-search'],
   data() {
     return {
       search: ''
@@ -46,4 +45,15 @@ export default {
     width: 100%
     padding: .5rem
     font-size: 1.2rem
+
+.form-icon
+  cursor: pointer
+  transition: 200ms
+  border-radius: .5rem
+  width: 2.5rem
+  height: 2.5rem
+
+  &:hover
+    transform: scale(1.1)
+    background-color: rgba(0,0, 0, 0.05)
 </style>

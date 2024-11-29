@@ -6,7 +6,7 @@
       </my-button>
 
       <div class="requests-list__filters">
-        <my-search placeholder="Поиск (№ заявки, название)" @search="updateSearch" />
+        <my-search placeholder="Поиск (№ заявки, название)" @start-search="updateSearch" />
         <my-select placeholder="Дом" :options="premisesOptions" @input="updatePremises" />
       </div>
     </header>
@@ -38,6 +38,8 @@
       </div>
 
       <RequestPagination @updatePage="updatePage" />
+
+      <create-edit-modal />
     </footer>
   </div>
 </template>
@@ -45,17 +47,18 @@
 <script>
 import RequestsTable from '@/components/Requests/RequestsTable.vue'
 import RequestPagination from './RequestPagination.vue'
+import CreateEditModal from './CreateEditModal.vue'
 
 export default {
   name: 'RequestsList',
   components: {
     RequestsTable,
-    RequestPagination
+    RequestPagination,
+    CreateEditModal
   },
   data() {
     return {
-      loaded: false,
-      search: ''
+      loaded: false
     }
   },
   computed: {
@@ -119,7 +122,6 @@ export default {
     },
 
     async updateSearch(value) {
-      this.search = value
       const payload = {
         page_size: this.reqData?.page_size,
         page: 1,
