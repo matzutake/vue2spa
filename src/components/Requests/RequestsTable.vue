@@ -17,7 +17,7 @@
 
     <tbody v-if="loaded" class="requests-table__body">
       <tr v-for="request in requests" class="requests-table__row">
-        <td>
+        <td @click="openRequest(request)">
           <span class="requests-table__number">{{ request.number }}</span>
         </td>
         <td>
@@ -92,6 +92,9 @@ export default {
       } else {
         return address + apartment
       }
+    },
+    openRequest(request) {
+      this.$emit('openRequest', request)
     }
   }
 }

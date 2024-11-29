@@ -1,5 +1,6 @@
 export default {
   reqData: (state) => state.reqData,
   reqList: (state) => state.reqList,
-  premises: (state) => state.premises
+  premises: (state) => state.premises,
+  currentRequest: (state) => state.currentRequest
 }

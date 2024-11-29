@@ -1,7 +1,7 @@
 <template>
   <div class="requests-list">
     <header class="requests-list__header">
-      <my-button width="auto" class="requests-list__create">
+      <my-button width="auto" class="requests-list__create" @click="createRequest">
         <template #text>Создать</template>
       </my-button>
 
@@ -12,7 +12,7 @@
     </header>
 
     <div class="table-wrapper">
-      <RequestsTable :loaded="loaded" />
+      <RequestsTable :loaded="loaded" @openRequest="editRequest" />
     </div>
 
     <footer v-if="loaded" class="requests-list__footer">
@@ -39,7 +39,12 @@
 
       <RequestPagination @updatePage="updatePage" />
 
-      <create-edit-modal />
+      <create-edit-modal
+        v-if="isOpen"
+        :type="modalType"
+        ref="createEditModal"
+        @close="closeModal"
+      />
     </footer>
   </div>
 </template>
@@ -58,7 +63,9 @@ export default {
   },
   data() {
     return {
-      loaded: false
+      loaded: false,
+      isOpen: false,
+      modalType: 'create'
     }
   },
   computed: {
@@ -132,6 +139,21 @@ export default {
       await this.$store.dispatch('getReqList', payload).then(() => {
         this.loaded = true
       })
+    },
+
+    async editRequest(request) {
+      this.$store.dispatch('getCurrentReq', request.id)
+
+      this.isOpen = true
+      this.modalType = 'edit'
+    },
+
+    createRequest() {
+      this.isOpen = true
+      this.modalType = 'create'
+    },
+    closeModal() {
+      this.isOpen = false
     }
   }
 }
@@ -142,7 +164,7 @@ export default {
   @include scrollbar
   overflow-y: auto
   flex: 1
-  max-height: 75vh
+  max-height: 65vh
 
 .requests-list
   display: flex

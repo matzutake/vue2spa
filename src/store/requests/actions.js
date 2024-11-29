@@ -33,5 +33,23 @@ export default {
     } catch (error) {
       throw error
     }
+  },
+
+  async getCurrentReq({ commit }, id) {
+    try {
+      const response = await getQuery(
+        `/appeals/v1.0/appeals/${id}/`,
+        {},
+        {
+          Authorization: `Token ${store.getters.key}`
+        }
+      )
+
+      commit('SET_CURRENT_REQUEST', response)
+
+      return response
+    } catch (error) {
+      throw error
+    }
   }
 }
