@@ -6,6 +6,7 @@ const state = {
   reqData: {},
   reqList: [],
   premises: [],
+  apartments: [],
   currentRequest: {}
 }
 

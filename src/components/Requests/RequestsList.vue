@@ -39,12 +39,15 @@
 
       <RequestPagination @updatePage="updatePage" />
 
-      <create-edit-modal
-        v-if="isOpen"
-        :type="modalType"
-        ref="createEditModal"
-        @close="closeModal"
-      />
+      <Transition name="fade">
+        <create-edit-modal
+          v-if="isOpen"
+          :type="modalType"
+          ref="createEditModal"
+          :loaded="createEditLoaded"
+          @close="closeModal"
+        />
+      </Transition>
     </footer>
   </div>
 </template>
@@ -65,7 +68,8 @@ export default {
     return {
       loaded: false,
       isOpen: false,
-      modalType: 'create'
+      modalType: 'create',
+      createEditLoaded: false
     }
   },
   computed: {
@@ -142,7 +146,9 @@ export default {
     },
 
     async editRequest(request) {
-      this.$store.dispatch('getCurrentReq', request.id)
+      this.$store.dispatch('getCurrentReq', request.id).then(() => {
+        this.createEditLoaded = true
+      })
 
       this.isOpen = true
       this.modalType = 'edit'
@@ -151,6 +157,7 @@ export default {
     createRequest() {
       this.isOpen = true
       this.modalType = 'create'
+      this.createEditLoaded = true
     },
     closeModal() {
       this.isOpen = false
@@ -199,4 +206,20 @@ export default {
   display: flex
   gap: 1rem
   align-items: center
+
+.fade-enter-active,
+.fade-leave-active
+  transition: 300ms
+
+.fade-enter-from,
+.fade-leave-to
+  opacity: 0
+
+.fade-enter-to,
+.fade-leave-from
+  opacity: 1
+
+@media screen and (max-width: 768px)
+  .table-wrapper
+    max-height: 50vh
 </style>

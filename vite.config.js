@@ -7,8 +7,7 @@ export default defineConfig({
     preprocessorOptions: {
       sass: {
         additionalData: `
-        @import "@/assets/sass/variables.sass"
-        @import "@/assets/sass/mixins.sass"
+        @use "@/assets/sass/main.sass" as *
         `
       }
     }

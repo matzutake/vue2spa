@@ -1,5 +1,5 @@
 <template>
-  <div class="my-button" @click="$emit('click')">
+  <div class="my-button" @click.stop="$emit('click')">
     <slot name="text" />
   </div>
 </template>
@@ -24,5 +24,5 @@ export default {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1)
 
   &:hover
-    background-color: darken($green, 10%)
+    background-color: $green-hover
 </style>

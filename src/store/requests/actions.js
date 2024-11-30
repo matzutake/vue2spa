@@ -35,6 +35,20 @@ export default {
     }
   },
 
+  async getApartments({ commit }, payload) {
+    try {
+      const response = await getQuery(`/geo/v1.0/apartments/`, payload, {
+        Authorization: `Token ${store.getters.key}`
+      })
+
+      commit('SET_APARTMENTS', response.results)
+
+      return response
+    } catch (error) {
+      throw error
+    }
+  },
+
   async getCurrentReq({ commit }, id) {
     try {
       const response = await getQuery(

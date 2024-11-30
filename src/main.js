@@ -16,11 +16,13 @@ import MyButton from '@/components/UI/MyButton.vue'
 import MyInput from '@/components/UI/MyInput.vue'
 import MySelect from '@/components/UI/MySelect.vue'
 import MySearch from '@/components/UI/MySearch.vue'
+import MyTextArea from '@/components/UI/MyTextArea.vue'
 
 Vue.component('my-button', MyButton)
 Vue.component('my-input', MyInput)
 Vue.component('my-select', MySelect)
 Vue.component('my-search', MySearch)
+Vue.component('my-textarea', MyTextArea)
 
 new Vue({
   router,
