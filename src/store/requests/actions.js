@@ -1,4 +1,6 @@
 import getQuery from '@/services/queryWrap/getQuery'
+import postQuery from '@/services/queryWrap/postQuery'
+import patchQuery from '@/services/queryWrap/patchQuery'
 import store from '@/store'
 
 export default {
@@ -60,6 +62,49 @@ export default {
       )
 
       commit('SET_CURRENT_REQUEST', response)
+      store.dispatch('getApartments', { premise_id: response.premise.id })
+
+      return response
+    } catch (error) {
+      throw error
+    }
+  },
+
+  async updatePremise({ commit }, payload) {
+    try {
+      const response = await getQuery(`/geo/v2.0/user-premises/`, payload, {
+        Authorization: `Token ${store.getters.key}`
+      })
+
+      commit('UPDATE_REQUEST_PREMISE', response.results)
+
+      return response
+    } catch (error) {
+      throw error
+    }
+  },
+
+  async updateRequest({ commit }, payload) {
+    try {
+      const response = await patchQuery(`/appeals/v1.0/appeals/${payload.id}/`, payload, {
+        headers: {
+          Authorization: `Token ${store.getters.key}`
+        }
+      })
+
+      return response
+    } catch (error) {
+      throw error
+    }
+  },
+
+  async createRequest({ commit }, payload) {
+    try {
+      const response = await postQuery('/appeals/v1.0/appeals/', payload, {
+        headers: {
+          Authorization: `Token ${store.getters.key}`
+        }
+      })
 
       return response
     } catch (error) {

@@ -4,14 +4,41 @@
       <tr class="requests-table__row">
         <td>
           <span>№</span>
-          <img src="@/assets/icons/sort.svg" width="24" height="24" alt="сортировка" />
+          <img
+            src="@/assets/icons/sort.svg"
+            width="24"
+            height="24"
+            alt="сортировка"
+            :style="{ transform: `rotate(${numDir !== 'asc' ? 0 : 180}deg)` }"
+            @click="sortByNumber"
+          />
         </td>
-        <td>Создана</td>
+        <td>
+          <span>Создана</span>
+          <img
+            src="@/assets/icons/sort.svg"
+            width="24"
+            height="24"
+            alt="сортировка"
+            :style="{ transform: `rotate(${dateDir !== 'asc' ? 0 : 180}deg)` }"
+            @click="sortByDate"
+          />
+        </td>
         <td>Адрес</td>
         <td>Заявитель</td>
         <td>Описание</td>
         <td>Срок</td>
-        <td>Статус</td>
+        <td>
+          <span>Статус</span>
+          <img
+            src="@/assets/icons/sort.svg"
+            width="24"
+            height="24"
+            alt="сортировка"
+            :style="{ transform: `rotate(${statusDir !== 'asc' ? 0 : 180}deg)` }"
+            @click="sortByStatus"
+          />
+        </td>
       </tr>
     </thead>
 
@@ -55,7 +82,10 @@ export default {
   props: {
     loaded: {
       type: Boolean,
-      default: false
+      default: false,
+      numDir: 'asc',
+      dateDir: 'asc',
+      statusDir: 'asc'
     }
   },
   computed: {
@@ -95,6 +125,18 @@ export default {
     },
     openRequest(request) {
       this.$emit('openRequest', request)
+    },
+    sortByNumber() {
+      this.$store.commit('SORT_BY_NUMBER', this.numDir)
+      this.numDir = this.numDir === 'asc' ? 'desc' : 'asc'
+    },
+    sortByDate() {
+      this.$store.commit('SORT_BY_DATE', this.dateDir)
+      this.dateDir = this.dateDir === 'asc' ? 'desc' : 'asc'
+    },
+    sortByStatus() {
+      this.$store.commit('SORT_BY_STATUS', this.statusDir)
+      this.statusDir = this.statusDir === 'asc' ? 'desc' : 'asc'
     }
   }
 }

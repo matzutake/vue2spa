@@ -7,7 +7,24 @@ const state = {
   reqList: [],
   premises: [],
   apartments: [],
-  currentRequest: {}
+  currentRequest: {
+    premise: {
+      id: null
+    },
+    apartment: {
+      id: null
+    },
+    due_date: null,
+    applicant: {
+      last_name: '',
+      first_name: '',
+      patronymic_name: '',
+      username: ''
+    },
+    status: {
+      id: 1
+    }
+  }
 }
 
 export default {

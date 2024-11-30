@@ -7,11 +7,11 @@ const apiClient = axios.create({
   }
 })
 
-const postQuery = async (url, data, config = {}) => {
+const patchQuery = async (url, data, config = {}) => {
   try {
     const { headers = {}, ...restConfig } = config
 
-    const response = await apiClient.post(url, data, {
+    const response = await apiClient.patch(url, data, {
       ...restConfig,
       headers: {
         ...apiClient.defaults.headers,
@@ -24,4 +24,4 @@ const postQuery = async (url, data, config = {}) => {
   }
 }
 
-export default postQuery
+export default patchQuery

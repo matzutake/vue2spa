@@ -44,8 +44,8 @@
           v-if="isOpen"
           :type="modalType"
           ref="createEditModal"
-          :loaded="createEditLoaded"
           @close="closeModal"
+          @updateList="updateSearch"
         />
       </Transition>
     </footer>
@@ -146,9 +146,7 @@ export default {
     },
 
     async editRequest(request) {
-      this.$store.dispatch('getCurrentReq', request.id).then(() => {
-        this.createEditLoaded = true
-      })
+      await this.$store.dispatch('getCurrentReq', request.id)
 
       this.isOpen = true
       this.modalType = 'edit'

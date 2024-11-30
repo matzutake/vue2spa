@@ -19,5 +19,29 @@ export default {
   },
   SET_APARTMENTS(state, data) {
     state.apartments = data
+  },
+  UPDATE_REQUEST_PREMISE(state, data) {
+    state.currentRequest.premise = data[0]
+  },
+
+  UPDATE_APARTMENT(state, id) {
+    state.currentRequest.apartment.id = id
+  },
+  SORT_BY_NUMBER(state, direction) {
+    if (direction === 'desc') state.reqList.sort((a, b) => b.number - a.number)
+
+    if (direction === 'asc') state.reqList.sort((a, b) => a.number - b.number)
+  },
+  SORT_BY_DATE(state, direction) {
+    if (direction === 'desc')
+      state.reqList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+
+    if (direction === 'asc')
+      state.reqList.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+  },
+  SORT_BY_STATUS(state, direction) {
+    if (direction === 'desc') state.reqList.sort((a, b) => b.status.id - a.status.id)
+
+    if (direction === 'asc') state.reqList.sort((a, b) => a.status.id - b.status.id)
   }
 }
